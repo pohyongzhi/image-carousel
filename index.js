@@ -4,28 +4,30 @@ class CarouselController {
         this.counter = 0;
         this.controllerInit();
         this.buttonInit();
+        this.circleNavInit();
+        this.updateBtnBackground(0);
     }
 
     controllerInit() {
-        const len = this.currentImg.length;
-
-        // Initialize first picture
-        const img = document.createElement("img");
-        img.src = `assets/${this.currentImg[this.counter++ % len]}`;
-        img.alt = "Image of Singapore";
-
         const carouselImage = document.querySelector(".carousel-image");
-        carouselImage.appendChild(img);
 
         // Change Image after 5 section
         setInterval(() => {
             const img = document.createElement("img");
-            img.src = `assets/${this.currentImg[this.counter++ % len]}`;
+            img.src = `assets/${this.currentImg[this.counter]}`;
             img.alt = "Image of Singapore";
 
             carouselImage.innerHTML = "";
             carouselImage.appendChild(img);
-        }, 5000);
+
+            this.updateBtnBackground(this.counter);
+
+            this.counter++;
+
+            if (this.counter === 3) {
+                this.counter = 0;
+            }
+        }, 2000);
     }
 
     buttonInit() {
@@ -37,7 +39,7 @@ class CarouselController {
             if (this.counter === 0) {
                 this.counter = this.currentImg.length - 1;
             } else {
-                this.counter = this.counter - 1;
+                this.counter -= 1;
             }
 
             const img = document.createElement("img");
@@ -46,19 +48,64 @@ class CarouselController {
 
             carouselImage.innerHTML = "";
             carouselImage.appendChild(img);
+
+            this.updateBtnBackground(this.counter);
         });
 
-        const len = this.currentImg.length;
         const rightBtn = document.querySelector(".carousel-right-btn");
 
         rightBtn.addEventListener("click", () => {
+            // Loop back to the first image if at the end
+            this.counter = (this.counter + 1) % this.currentImg.length;
+
             const img = document.createElement("img");
-            img.src = `assets/${this.currentImg[this.counter++ % len]}`;
+            img.src = `assets/${this.currentImg[this.counter]}`;
             img.alt = "Image of Singapore";
 
             carouselImage.innerHTML = "";
             carouselImage.appendChild(img);
+
+            this.updateBtnBackground(this.counter);
         });
+    }
+
+    circleNavInit() {
+        const carouselNav = document.querySelector(".carousel-nav");
+
+        const len = this.currentImg.length;
+
+        for (let index = 0; index < len; index++) {
+            const btn = document.createElement("button");
+            btn.id = this.currentImg[index];
+            carouselNav.appendChild(btn);
+
+            btn.addEventListener("click", () => {
+                const img = document.createElement("img");
+                img.src = `assets/${this.currentImg[index]}`;
+                img.alt = "Image of Singapore";
+
+                const carouselImage = document.querySelector(".carousel-image");
+                carouselImage.innerHTML = "";
+                carouselImage.appendChild(img);
+
+                this.counter = index;
+
+                this.updateBtnBackground(index);
+            });
+        }
+    }
+
+    updateBtnBackground(index) {
+        // Reset the colors of all buttons
+        const len = this.currentImg.length;
+        for (let i = 0; i < len; i++) {
+            const btn = document.getElementById(`${this.currentImg[i]}`);
+            btn.style.backgroundColor = "white";
+        }
+
+        // Change the color of the current selected button
+        const btn = document.getElementById(`${this.currentImg[index]}`);
+        btn.style.backgroundColor = "gray";
     }
 }
 
