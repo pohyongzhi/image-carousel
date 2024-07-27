@@ -71,18 +71,21 @@ body {
 
 .carousel {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     background-color: black;
-    width: 50%;
-    height: 50%;
-    overflow: hidden;
+    width: 750px;
+    height: 350px;
+}
+
+.carousel-container {
+    display: flex;
 }
 
 .carousel-image {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 85%;
 }
 
 .carousel-image img {
@@ -92,6 +95,6 @@ body {
 }
 
 .carousel-nav {
-    background-color: white;
-    height: 15%;
+    flex: 1;
+    background-color: gray;
 }
